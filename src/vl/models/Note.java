@@ -1,4 +1,4 @@
-package vl.soundengine;
+package vl.models;
 
 public class Note {
     private int note, velocity;

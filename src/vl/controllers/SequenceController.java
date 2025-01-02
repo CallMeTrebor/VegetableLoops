@@ -1,46 +1,40 @@
-package vl.soundengine;
+package vl.controllers;
+
+import vl.models.Note;
+import vl.models.SequenceModel;
+import vl.views.SequenceViewMinimized;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Sequence {
-    private final List<Note> notes = new ArrayList<>();
-    private int instrumentID;
+public class SequenceController {
+    private final SequenceModel sequenceModel;
+    private final SequenceViewMinimized view;
 
-    public Sequence() {
-        this(0);
+    public SequenceController() {
+        this(new SequenceModel(), new SequenceViewMinimized(new SequenceModel()));
     }
 
-    public Sequence(int instrumentID) {
-        this.instrumentID = instrumentID;
+    public SequenceController(SequenceModel sequence, SequenceViewMinimized view) {
+        this.sequenceModel = sequence;
+        this.view = view;
+        this.view.setSequenceModel(sequence); // Ensure the view has access to the model
     }
 
     public void add(Note note) {
-        notes.add(note);
-    }
-
-    public List<Note> getNotes() {
-        return notes;
+        sequenceModel.add(note);
+        view.repaint(); // Update the view
     }
 
     public void removeNote(int index) {
-        notes.remove(index);
+        sequenceModel.removeNote(index);
+        view.repaint(); // Update the view
     }
 
-    public Note getNote(int index) {
-        return notes.get(index);
-    }
-
-    public void setInstrumentID(int instrumentID) {
-        this.instrumentID = instrumentID;
-    }
-
-    public int getInstrumentID() {
-        return instrumentID;
+    public SequenceViewMinimized getView() {
+        return view;
     }
 
     /**
@@ -50,7 +44,8 @@ public class Sequence {
      */
     public void compileToTrack(Track track, long tickOffset) {
         try {
-            ShortMessage setInstrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrumentID, 0);
+            ShortMessage setInstrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0,
+                    sequenceModel.getInstrumentID(), 0);
             track.add(new MidiEvent(setInstrument, tickOffset));
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
@@ -58,7 +53,7 @@ public class Sequence {
             // TODO: Handle exception
         }
 
-        for (Note note : notes) {
+        for (Note note : sequenceModel.getNotes()) {
             try {
                 ShortMessage on = new ShortMessage(ShortMessage.NOTE_ON, 0, note.getNote(), note.getVelocity());
                 ShortMessage off = new ShortMessage(ShortMessage.NOTE_OFF, 0, note.getNote(), note.getVelocity());
