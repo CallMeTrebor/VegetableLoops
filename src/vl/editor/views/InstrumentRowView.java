@@ -1,7 +1,7 @@
-package vl.views;
+package vl.editor.views;
 
-import vl.controllers.SequenceController;
-import vl.models.InstrumentRowModel;
+import vl.editor.controllers.SequenceController;
+import vl.editor.models.InstrumentRowModel;
 import vl.util.Tuple;
 
 import javax.swing.*;

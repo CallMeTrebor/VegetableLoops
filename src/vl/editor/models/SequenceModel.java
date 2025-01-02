@@ -1,4 +1,4 @@
-package vl.models;
+package vl.editor.models;
 
 import java.util.ArrayList;
 import java.util.List;

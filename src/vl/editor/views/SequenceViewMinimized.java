@@ -1,7 +1,7 @@
-package vl.views;
+package vl.editor.views;
 
-import vl.models.SequenceModel;
-import vl.models.Note;
+import vl.editor.models.SequenceModel;
+import vl.editor.models.Note;
 
 import javax.swing.*;
 import java.awt.*;

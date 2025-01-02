@@ -1,7 +1,7 @@
-package vl.controllers;
+package vl.editor.controllers;
 
-import vl.models.EditorModel;
-import vl.views.EditorViewPanel;
+import vl.editor.models.EditorModel;
+import vl.editor.views.EditorViewPanel;
 
 public class EditorController {
     private final EditorModel editorModel;

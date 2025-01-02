@@ -1,6 +1,6 @@
-package vl.models;
+package vl.editor.models;
 
-import vl.controllers.InstrumentRowController;
+import vl.editor.controllers.InstrumentRowController;
 
 import java.util.ArrayList;
 import java.util.List;

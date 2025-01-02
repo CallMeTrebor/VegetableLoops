@@ -1,6 +1,6 @@
-package vl.models;
+package vl.editor.models;
 
-import vl.controllers.SequenceController;
+import vl.editor.controllers.SequenceController;
 import vl.util.Tuple;
 
 import java.util.ArrayList;

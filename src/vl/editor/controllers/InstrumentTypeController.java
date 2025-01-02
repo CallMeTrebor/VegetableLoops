@@ -1,7 +1,7 @@
-package vl.controllers;
+package vl.editor.controllers;
 
-import vl.models.InstrumentTypeModel;
-import vl.views.InstrumentTypeView;
+import vl.editor.models.InstrumentTypeModel;
+import vl.editor.views.InstrumentTypeView;
 
 public class InstrumentTypeController {
     private InstrumentTypeModel model;

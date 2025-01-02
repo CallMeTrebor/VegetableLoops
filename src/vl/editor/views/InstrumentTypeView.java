@@ -1,4 +1,4 @@
-package vl.views;
+package vl.editor.views;
 
 import javax.swing.*;
 import java.awt.*;

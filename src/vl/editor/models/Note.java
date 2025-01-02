@@ -1,4 +1,4 @@
-package vl.models;
+package vl.editor.models;
 
 public class Note {
     private int note, velocity;

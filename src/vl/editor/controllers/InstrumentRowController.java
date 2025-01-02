@@ -1,7 +1,7 @@
-package vl.controllers;
+package vl.editor.controllers;
 
-import vl.models.InstrumentRowModel;
-import vl.views.InstrumentRowView;
+import vl.editor.models.InstrumentRowModel;
+import vl.editor.views.InstrumentRowView;
 
 public class InstrumentRowController {
     private final InstrumentRowModel sequence;

@@ -1,8 +1,8 @@
-package vl.controllers;
+package vl.editor.controllers;
 
-import vl.models.Note;
-import vl.models.SequenceModel;
-import vl.views.SequenceViewMinimized;
+import vl.editor.models.Note;
+import vl.editor.models.SequenceModel;
+import vl.editor.views.SequenceViewMinimized;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiEvent;

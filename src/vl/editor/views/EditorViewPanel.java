@@ -1,6 +1,5 @@
-package vl.views;
+package vl.editor.views;
 
-import vl.controllers.InstrumentRowController;
 import vl.util.VerticalFlowLayout;
 
 import javax.swing.*;
