@@ -1,5 +1,6 @@
 package vl.editor.views;
 
+import vl.common.VLConstants;
 import vl.editor.models.SequenceModel;
 import vl.editor.models.Note;
 
@@ -57,7 +58,7 @@ public class SequenceViewMinimized extends JPanel {
         }
 
         // Fill the background
-        setBackground(InstrumentRowView.BACKGROUND_COLOR);
+        setBackground(VLConstants.BACKGROUND_COLOR);
         g.setColor(backgroundColor);
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
 

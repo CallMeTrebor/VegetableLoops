@@ -1,61 +1,92 @@
 package vl.editor.views;
 
+import vl.common.VLConstants;
+import vl.editor.controllers.InstrumentRowController;
 import vl.editor.controllers.SequenceController;
 import vl.editor.models.InstrumentRowModel;
 import vl.util.Tuple;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.awt.event.MouseEvent;
 
 public class InstrumentRowView extends JPanel {
-    private InstrumentRowModel model;
-    public static final Color BACKGROUND_COLOR = Color.DARK_GRAY;
-    private int height = 100;
+    private InstrumentRowController controller;
+    private Tuple<Integer, Integer> dragStart;
+    private Tuple<Integer, Integer> dragEnd;
+    private static final Color SELECTION_COLOR = new Color(255, 0, 0, 100); // Semi-transparent red
+    private int gridCellWidth = 20;
 
-    public InstrumentRowView(InstrumentRowModel model) {
-        this.model = model;
-        setLayout(null); // Use null layout since we set bounds manually
-        setBounds(0, 0, 800, height); // Set bounds manually
+    public InstrumentRowView() {
+        setLayout(null);
+        setBounds(0, 0, 800, 100);
+        setBackground(VLConstants.BACKGROUND_COLOR);
+        revalidate();
+        repaint();
 
-        updateView(); // Populate the panel with SequenceViewMinimized instances
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                dragStart = fromAbsToGridPos(e.getX());
+                dragEnd = dragStart;
+                repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (dragStart != null && dragEnd != null) {
+                    int startTick = Math.min(dragStart.getFirst(), dragEnd.getFirst());
+                    int endTick = Math.max(dragStart.getFirst(), dragEnd.getFirst());
+
+                    // Launch modal with a new sequence
+                    int tickNumber = endTick - startTick;
+                    SequenceController sequenceController = new SequenceController();
+                    sequenceController.setInstrumentID(0); // TODO: DEBUG NUMBER
+                    sequenceController.launchModal(tickNumber);
+
+                    // Add to model
+                    controller.addSequence(sequenceController, startTick);
+                    revalidate();
+                    repaint();
+                }
+                dragStart = null;
+                dragEnd = null;
+                repaint();
+            }
+        });
+
+        addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                dragEnd = fromAbsToGridPos(e.getX());
+                repaint();
+            }
+        });
     }
 
-    public InstrumentRowModel getModel() {
-        return model;
-    }
-
-    public void setModel(InstrumentRowModel model) {
-        this.model = model;
-        updateView(); // Refresh the panel when the model changes
-    }
-
-    private void updateView() {
-        removeAll(); // Clear previous components
-
-        List<Tuple<SequenceController, Integer>> sequences = model.getSequences();
-        for (Tuple<SequenceController, Integer> sequence : sequences) {
-            SequenceViewMinimized originalView = sequence.getFirst().getView();
-
-            // Create a new view so we don't affect the original one
-            SequenceViewMinimized view = new SequenceViewMinimized(originalView.getSequenceModel(),
-                    originalView.getBackgroundColor(), originalView.getNoteColor());
-            int xCoord = sequence.getSecond();
-            view.setBounds(xCoord, 0, view.getPreferredSize().width, height); // Set bounds manually
-            add(view); // Add the SequenceViewMinimized to the panel
-        }
-
-        setBackground(BACKGROUND_COLOR);
-        revalidate(); // Refresh the layout
-        repaint(); // Repaint the panel
+    private Tuple<Integer, Integer> fromAbsToGridPos(int x) {
+        return new Tuple<>(x / gridCellWidth, 0); // Only x matters for tick
     }
 
     @Override
-    public int getHeight() {
-        return height;
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        // Draw drag selection
+        if (dragStart != null && dragEnd != null) {
+            int startX = Math.min(dragStart.getFirst(), dragEnd.getFirst()) * gridCellWidth;
+            int endX = Math.max(dragStart.getFirst(), dragEnd.getFirst()) * gridCellWidth;
+
+            g.setColor(SELECTION_COLOR);
+            g.fillRect(startX, 0, endX - startX, getHeight());
+        }
+
+        // add a separator line at the bottom
+        g.setColor(VLConstants.BUTTON_COLOR);
+        g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public void setController(InstrumentRowController controller) {
+        this.controller = controller;
     }
 }

@@ -3,6 +3,8 @@ package vl.editor.controllers;
 import vl.editor.models.EditorModel;
 import vl.editor.views.EditorViewPanel;
 
+import java.util.List;
+
 public class EditorController {
     private final EditorModel editorModel;
     private final EditorViewPanel editorViewPanel;
@@ -39,5 +41,13 @@ public class EditorController {
         editorModel.getInstrumentRows().clear();
         editorViewPanel.clearView();
         editorViewPanel.repaint();
+    }
+
+    public EditorViewPanel getView() {
+        return editorViewPanel;
+    }
+
+    public List<InstrumentRowController> getInstrumentRows() {
+        return editorModel.getInstrumentRows();
     }
 }

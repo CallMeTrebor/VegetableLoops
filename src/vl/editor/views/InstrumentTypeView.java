@@ -9,9 +9,9 @@ public class InstrumentTypeView extends JPanel {
     private final JTextField volumeTextField;
 
     public InstrumentTypeView() {
-        setLayout(new BorderLayout()); // Stack instrument types vertically
+        setLayout(new BorderLayout());
         setBackground(Color.DARK_GRAY); // Set background color
-        setPreferredSize(new Dimension(200, 100)); // Set fixed size for each instrument type view
+        setPreferredSize(new Dimension(200, 100));
 
         instrumentTypeNameLabel = new JLabel("Instrument Type");
         instrumentTypeNameLabel.setForeground(Color.WHITE);

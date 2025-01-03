@@ -1,13 +1,14 @@
 package vl.editor.views;
 
+import vl.common.VLConstants;
 import vl.util.VerticalFlowLayout;
 
 import javax.swing.*;
 
 public class EditorViewPanel extends JPanel {
     public EditorViewPanel() {
-        setLayout(new VerticalFlowLayout());
-        setBackground(InstrumentRowView.BACKGROUND_COLOR);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(VLConstants.BACKGROUND_COLOR);
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // No outer margins
     }
 
