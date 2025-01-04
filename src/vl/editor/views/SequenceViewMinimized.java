@@ -20,8 +20,6 @@ public class SequenceViewMinimized extends JPanel {
         this.sequenceModel = sequenceModel;
         this.backgroundColor = backgroundColor;
         this.noteColor = noteColor;
-
-        setPreferredSize(new Dimension(100, 50)); // Set a fixed size for the panel
     }
 
     public SequenceModel getSequenceModel() {
@@ -48,44 +46,54 @@ public class SequenceViewMinimized extends JPanel {
         this.noteColor = noteColor;
     }
 
-    // TODO: REDO METHOD
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         if (sequenceModel == null) {
+            System.out.println("[WARN] No model set for SequenceViewMinimized: " + this);
             return; // Avoid rendering if no model is set
         }
 
         // Fill the background
-        setBackground(VLConstants.BACKGROUND_COLOR);
         g.setColor(backgroundColor);
         g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
 
-        // Sort notes by pitch
-        sequenceModel.getNotes().sort((a, b) -> Integer.compare(a.getNote(), b.getNote()));
-
-        // Determine bounds for note rendering
-        int totalDuration = sequenceModel.getNotes().stream().mapToInt(Note::getDuration).sum();
-        int noteCount = sequenceModel.getNotes().size();
         int panelHeight = getHeight();
         int panelWidth = getWidth();
 
-        // Compute height for each note block and initialize x position
-        int blockHeight = panelHeight / noteCount;
-        int x = 0;
+        // Compute block dimensions
+        int blockHeight = panelHeight / 32;
+        int totalTicks = sequenceModel.getTicks();
 
-        // Set note color and draw rectangles
-        g.setColor(noteColor);
-        for (Note note : sequenceModel.getNotes()) {
-            int width = note.getDuration() * panelWidth / totalDuration; // Scale width by note duration
-            int y = panelHeight - blockHeight * (noteCount--); // Map note to its vertical order
-
-            g.fillRect(x, y, width, blockHeight);
-            x += width; // Increment x position
+        // Calculate exact pixel positions for each tick
+        int[] tickPositions = new int[totalTicks + 1];
+        for (int i = 0; i <= totalTicks; i++) {
+            tickPositions[i] = (int) Math.round((double) i / totalTicks * panelWidth);
         }
 
-        // draw a line at the bottom of the panel the height of 10 pixels
+        // Draw each note
+        g.setColor(noteColor);
+        for (Note note : sequenceModel.getNotes()) {
+            int entryTick = (int) Math.min(note.getEntryTick(), totalTicks); // Clamp entry tick
+            int endTick = (int) Math.min(note.getEntryTick() + note.getDuration(), totalTicks); // Clamp end tick
+
+            // Skip invalid notes
+            if (entryTick >= totalTicks || endTick <= entryTick) {
+                continue;
+            }
+
+            int x = tickPositions[entryTick];
+            int width = tickPositions[endTick] - x;
+            int y = note.getNote() * blockHeight;
+
+            // Ensure note width and position fit within panel bounds
+            width = Math.min(width, panelWidth - x);
+
+            g.fillRect(x, y, width, blockHeight);
+        }
+
+        // Draw a line at the bottom of the panel
         int lineHeight = 5;
         g.fillRect(0, panelHeight - lineHeight, panelWidth, lineHeight);
     }

@@ -19,26 +19,45 @@ public class SequenceController {
     private final SequencerModal modal;
 
     private Function<SequenceController, Void> onModalClose;
+    private Function<Note, Void> onNoteChanged;
 
-    public SequenceController() {
-        this(new SequenceModel(), new SequenceViewMinimized(null));
+    public SequenceController(int ticks) {
+        this(new SequenceModel(0, ticks), new SequenceViewMinimized(null), ticks);
     }
 
-    public SequenceController(SequenceModel sequence, SequenceViewMinimized view) {
+    public SequenceController(SequenceModel sequence, SequenceViewMinimized view, int ticks) {
         this.sequenceModel = sequence;
         this.view = view;
         this.view.setSequenceModel(sequence); // Ensure the view has access to the model
-        this.modal = new SequencerModal();
+        this.modal = new SequencerModal(ticks);
+        this.modal.setSequenceController(this);
+
+        this.modal.setOnNoteAdd(this::addNote);
+        this.modal.setOnNoteRemove(this::removeNote);
     }
 
-    public void add(Note note) {
+    public Void addNote(Note note) {
         sequenceModel.add(note);
+        if(onNoteChanged != null) onNoteChanged.apply(note);
         view.repaint(); // Update the view
+
+        return null;
     }
 
-    public void removeNote(int index) {
+    public Void removeNote(int index) {
         sequenceModel.removeNote(index);
+        if(onNoteChanged != null) onNoteChanged.apply(null);
         view.repaint(); // Update the view
+
+        return null;
+    }
+
+    public Void removeNote(Note note) {
+        sequenceModel.removeNote(note);
+        if(onNoteChanged != null) onNoteChanged.apply(null);
+        view.repaint(); // Update the view
+
+        return null;
     }
 
     public SequenceViewMinimized getView() {
@@ -86,8 +105,8 @@ public class SequenceController {
         modal.setVisible(true);
     }
 
-    public void launchModal(int tickCount) {
-        modal.setTickCount(tickCount);
+    public void launchModal(int tickNumber) {
+        modal.setTickCount(tickNumber);
         modal.setVisible(true);
     }
 
@@ -100,10 +119,37 @@ public class SequenceController {
     }
 
     public void onModalClosing() {
-        onModalClose.apply(this);
+        if (onModalClose != null) onModalClose.apply(this);
     }
 
     public void setInstrumentID(int instrumentID) {
         sequenceModel.setInstrumentID(instrumentID);
+    }
+
+    public SequenceModel getSequenceModel() {
+        return sequenceModel;
+    }
+
+    public Function<Note, Void> getOnNoteChanged() {
+        return onNoteChanged;
+    }
+
+    public void setOnNoteChanged(Function<Note, Void> onNoteChanged) {
+        this.onNoteChanged = onNoteChanged;
+    }
+
+    public int getDuration() {
+        return sequenceModel.getNotes().stream()
+                .mapToInt(note -> Math.toIntExact(note.getEntryTick() + note.getDuration()))
+                .max()
+                .orElse(0);
+    }
+
+    public int getTicks() {
+        return sequenceModel.getTicks();
+    }
+
+    public void setTicks(int ticks) {
+        sequenceModel.setTicks(ticks);
     }
 }

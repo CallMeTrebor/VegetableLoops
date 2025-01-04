@@ -21,6 +21,7 @@ public class InstrumentRowView extends JPanel {
         setLayout(null);
         setBounds(0, 0, 800, 100);
         setBackground(VLConstants.BACKGROUND_COLOR);
+        setBackground(Color.YELLOW);
         revalidate();
         repaint();
 
@@ -39,13 +40,21 @@ public class InstrumentRowView extends JPanel {
                     int endTick = Math.max(dragStart.getFirst(), dragEnd.getFirst());
 
                     // Launch modal with a new sequence
-                    int tickNumber = endTick - startTick;
-                    SequenceController sequenceController = new SequenceController();
+                    int tickNumber = Math.max(Math.abs(endTick - startTick), 1);
+                    SequenceController sequenceController = new SequenceController(tickNumber);
                     sequenceController.setInstrumentID(0); // TODO: DEBUG NUMBER
                     sequenceController.launchModal(tickNumber);
 
                     // Add to model
                     controller.addSequence(sequenceController, startTick);
+                    add(sequenceController.getView());
+                    sequenceController.getView().setBounds(startTick * gridCellWidth, 0, tickNumber * gridCellWidth, getHeight());
+                    sequenceController.setOnNoteChanged(note -> {
+                        sequenceController.getView().revalidate();
+                        sequenceController.getView().repaint();;
+                        return null;
+                    });
+
                     revalidate();
                     repaint();
                 }
@@ -81,12 +90,16 @@ public class InstrumentRowView extends JPanel {
             g.fillRect(startX, 0, endX - startX, getHeight());
         }
 
-        // add a separator line at the bottom
+        // Draw separator line
         g.setColor(VLConstants.BUTTON_COLOR);
         g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
     }
 
     public void setController(InstrumentRowController controller) {
         this.controller = controller;
+    }
+
+    public InstrumentRowController getController() {
+        return this.controller;
     }
 }

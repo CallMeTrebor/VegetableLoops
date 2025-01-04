@@ -20,6 +20,7 @@ public class EditorWindow extends JFrame {
     private final EditorController editorController;
     JPanel instrumentTypesPanel = new JPanel();
     JPanel editorPanel = new JPanel();
+    VLButton playButton = new VLButton("Play");
 
     public EditorWindow() {
         setTitle("VegetableLoops");
@@ -60,19 +61,36 @@ public class EditorWindow extends JFrame {
         toolBar.setFloatable(false);
         VLButton addInstrumentButton = new VLButton("Add Instrument");
         toolBar.add(addInstrumentButton);
-        VLButton addSequenceButton = new VLButton("Add Sequence");
-        toolBar.add(addSequenceButton);
+        toolBar.add(playButton);
+
 
         addInstrumentButton.addActionListener(e -> {
             InstrumentModal instrumentModal = new InstrumentModal();
             InstrumentModalController instrumentModalController = new InstrumentModalController(instrumentModal);
             instrumentModalController.setOnModalExit(this::addInstrumentRow);
             instrumentModal.setVisible(true);
+            repaint();
         });
 
-        addSequenceButton.addActionListener(e -> {
-            SequenceController sequenceController = new SequenceController();
-            sequenceController.launchModal();
+        playButton.addActionListener(e -> {
+            editorController.playMusic();
+        });
+
+        // add sequence button is outdated, as sequences are now added by dragging on the instrument row
+        //        VLButton addSequenceButton = new VLButton("Add Sequence");
+//        toolBar.add(addSequenceButton);
+//        addSequenceButton.addActionListener(e -> {
+//            SequenceController sequenceController = new SequenceController();
+//            sequenceController.launchModal();
+//        });
+
+        // on resize redraw all
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                super.componentResized(e);
+                repaint();
+            }
         });
 
         add(toolBar, BorderLayout.NORTH);
@@ -97,6 +115,7 @@ public class EditorWindow extends JFrame {
         centerPanel.revalidate();
         centerPanel.repaint();
 
+        editorController.addInstrumentRowToModel(instrumentRowView.getController());
         return instrumentTypeController;
     }
 }

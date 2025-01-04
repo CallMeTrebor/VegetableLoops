@@ -4,6 +4,7 @@ import vl.editor.models.InstrumentRowModel;
 import vl.editor.views.InstrumentRowView;
 import vl.util.Tuple;
 
+import javax.sound.midi.Track;
 import java.util.List;
 
 public class InstrumentRowController {
@@ -35,5 +36,9 @@ public class InstrumentRowController {
 
     public void addSequence(SequenceController sequence, Integer tickOffset) {
         this.model.addSequence(sequence, tickOffset);
+    }
+
+    public void compileToTrack(Track track) {
+        model.getSequences().forEach(item -> item.getFirst().compileToTrack(track, item.getSecond()));
     }
 }
