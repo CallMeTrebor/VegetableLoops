@@ -37,12 +37,12 @@ public class SequenceModel {
         return notes.get(index);
     }
 
-    public void setInstrumentID(int instrumentID) {
-        this.instrumentID = instrumentID;
-    }
-
     public int getInstrumentID() {
         return instrumentID;
+    }
+
+    public void setInstrumentID(int instrumentID) {
+        this.instrumentID = instrumentID;
     }
 
     public int getTicks() {
@@ -51,5 +51,14 @@ public class SequenceModel {
 
     public void setTicks(int ticks) {
         this.ticks = ticks;
+    }
+
+    public String serialiseToFile() {
+        StringBuilder str = new StringBuilder(ticks + "," + notes.size());
+        for (Note note : notes) {
+            str.append(STR.",\{note.serialiseToFile()}");
+        }
+
+        return str.toString() + ',';
     }
 }

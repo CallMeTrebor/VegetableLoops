@@ -2,25 +2,25 @@ package vl.editor.views;
 
 import vl.common.VLButton;
 import vl.common.VLConstants;
+import vl.common.VLLabel;
 import vl.editor.controllers.EditorController;
 import vl.editor.controllers.InstrumentRowController;
 import vl.editor.controllers.InstrumentTypeController;
-import vl.editor.controllers.SequenceController;
 import vl.editor.models.EditorModel;
 import vl.editor.models.InstrumentRowModel;
 import vl.editor.models.InstrumentTypeModel;
-import vl.modals.controllers.InstrumentModalController;
-import vl.modals.views.InstrumentModal;
-import vl.util.VerticalFlowLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class EditorWindow extends JFrame {
     private final EditorController editorController;
     JPanel instrumentTypesPanel = new JPanel();
     JPanel editorPanel = new JPanel();
     VLButton playButton = new VLButton("Play");
+
+    java.util.List<InstrumentTypeController> instrumentTypeControllers = new LinkedList<>();
 
     public EditorWindow() {
         setTitle("VegetableLoops");
@@ -40,13 +40,18 @@ public class EditorWindow extends JFrame {
 
         // Panel for instrument rows in the center
         JPanel centerPanel = new JPanel();
-
-        // TODO: Figure out how to ditch box layout for vertical flow layout
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         editorPanel.add(centerPanel, BorderLayout.CENTER);
 
         // Split screen: left for instrument row, right for editor
-        instrumentTypesPanel.setLayout(new VerticalFlowLayout());
+        instrumentTypesPanel.setLayout(new BoxLayout(instrumentTypesPanel, BoxLayout.Y_AXIS));
+
+        VLLabel instrumentsLabel = new VLLabel("Instruments");
+        instrumentsLabel.setPreferredSize(new Dimension(200, 50));
+        instrumentsLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        instrumentsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        instrumentTypesPanel.add(instrumentsLabel);
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, instrumentTypesPanel, editorPanel);
         splitPane.setDividerLocation(200);
         splitPane.setResizeWeight(0.0);
@@ -58,31 +63,34 @@ public class EditorWindow extends JFrame {
 
         // Toolbar setup
         JToolBar toolBar = new JToolBar();
+        toolBar.setBackground(VLConstants.BACKGROUND_COLOR);
         toolBar.setFloatable(false);
-        VLButton addInstrumentButton = new VLButton("Add Instrument");
-        toolBar.add(addInstrumentButton);
-        toolBar.add(playButton);
 
+        VLButton saveButton = new VLButton("Save");
+        toolBar.add(saveButton);
 
-        addInstrumentButton.addActionListener(e -> {
-            InstrumentModal instrumentModal = new InstrumentModal();
-            InstrumentModalController instrumentModalController = new InstrumentModalController(instrumentModal);
-            instrumentModalController.setOnModalExit(this::addInstrumentRow);
-            instrumentModal.setVisible(true);
-            repaint();
+        VLButton stopButton = new VLButton("Stop");
+        toolBar.add(stopButton);
+
+        saveButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Specify a file to save into");
+            int userSelection = fileChooser.showSaveDialog(this);
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                String fileToSave = fileChooser.getSelectedFile().getAbsolutePath();
+                editorController.saveToFile(fileToSave, instrumentTypeControllers);
+            }
         });
 
+        toolBar.add(playButton);
         playButton.addActionListener(e -> {
             editorController.playMusic();
         });
 
-        // add sequence button is outdated, as sequences are now added by dragging on the instrument row
-        //        VLButton addSequenceButton = new VLButton("Add Sequence");
-//        toolBar.add(addSequenceButton);
-//        addSequenceButton.addActionListener(e -> {
-//            SequenceController sequenceController = new SequenceController();
-//            sequenceController.launchModal();
-//        });
+        toolBar.add(stopButton);
+        stopButton.addActionListener(e -> {
+            editorController.stopMusic();
+        });
 
         // on resize redraw all
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -106,8 +114,12 @@ public class EditorWindow extends JFrame {
         instrumentTypesPanel.revalidate();
         instrumentTypesPanel.repaint();
 
+        instrumentTypeControllers.add(instrumentTypeController);
+
         InstrumentRowView instrumentRowView = new InstrumentRowView();
         instrumentRowView.setController(new InstrumentRowController(new InstrumentRowModel(), instrumentRowView));
+
+        instrumentTypeController.setInstrumentRowController(instrumentRowView.getController());
 
         // Add the new instrument row to the center panel
         JPanel centerPanel = (JPanel) editorPanel.getComponent(1); // Assumes center is the second child

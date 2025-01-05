@@ -1,6 +1,5 @@
 package vl.modals.controllers;
 
-import vl.editor.controllers.InstrumentRowController;
 import vl.editor.controllers.InstrumentTypeController;
 import vl.editor.models.InstrumentTypeModel;
 import vl.modals.views.InstrumentModal;
@@ -8,7 +7,7 @@ import vl.modals.views.InstrumentModal;
 import java.util.function.Function;
 
 public class InstrumentModalController {
-    private InstrumentModal instrumentModal;
+    private final InstrumentModal instrumentModal;
 
     private Function<InstrumentTypeModel, InstrumentTypeController> onModalExit;
 

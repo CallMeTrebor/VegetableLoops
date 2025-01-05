@@ -4,6 +4,9 @@ import vl.editor.models.EditorModel;
 import vl.editor.views.EditorViewPanel;
 
 import javax.sound.midi.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class EditorController {
@@ -70,6 +73,18 @@ public class EditorController {
     public void stopMusic() {
         if (sequencer != null && sequencer.isRunning()) {
             sequencer.stop();
+        }
+    }
+
+    public void saveToFile(String fileToSave, List<InstrumentTypeController> instrumentTypeControllers) {
+        String str = instrumentTypeControllers.stream()
+                .map(InstrumentTypeController::serialiseToFile)
+                .reduce("", (acc, item) -> acc + ("\n" + item));
+
+        try {
+            Files.writeString(Path.of(fileToSave), str);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

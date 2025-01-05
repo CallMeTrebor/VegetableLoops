@@ -3,7 +3,6 @@ package vl.editor.views;
 import vl.common.VLConstants;
 import vl.editor.controllers.InstrumentRowController;
 import vl.editor.controllers.SequenceController;
-import vl.editor.models.InstrumentRowModel;
 import vl.util.Tuple;
 
 import javax.swing.*;
@@ -11,17 +10,16 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class InstrumentRowView extends JPanel {
+    private static final Color SELECTION_COLOR = new Color(255, 0, 0, 100); // Semi-transparent red
     private InstrumentRowController controller;
     private Tuple<Integer, Integer> dragStart;
     private Tuple<Integer, Integer> dragEnd;
-    private static final Color SELECTION_COLOR = new Color(255, 0, 0, 100); // Semi-transparent red
-    private int gridCellWidth = 20;
+    private final int gridCellWidth = 20;
 
     public InstrumentRowView() {
         setLayout(null);
         setBounds(0, 0, 800, 100);
         setBackground(VLConstants.BACKGROUND_COLOR);
-        setBackground(Color.YELLOW);
         revalidate();
         repaint();
 
@@ -41,7 +39,7 @@ public class InstrumentRowView extends JPanel {
 
                     // Launch modal with a new sequence
                     int tickNumber = Math.max(Math.abs(endTick - startTick), 1);
-                    SequenceController sequenceController = new SequenceController(tickNumber);
+                    SequenceController sequenceController = new SequenceController(tickNumber, getController());
                     sequenceController.setInstrumentID(0); // TODO: DEBUG NUMBER
                     sequenceController.launchModal(tickNumber);
 
@@ -51,7 +49,7 @@ public class InstrumentRowView extends JPanel {
                     sequenceController.getView().setBounds(startTick * gridCellWidth, 0, tickNumber * gridCellWidth, getHeight());
                     sequenceController.setOnNoteChanged(note -> {
                         sequenceController.getView().revalidate();
-                        sequenceController.getView().repaint();;
+                        sequenceController.getView().repaint();
                         return null;
                     });
 
@@ -71,6 +69,19 @@ public class InstrumentRowView extends JPanel {
                 repaint();
             }
         });
+    }
+
+    public void addSequence(SequenceController sequence, Integer tickOffset) {
+        add(sequence.getView());
+        sequence.getView().setBounds(tickOffset * gridCellWidth, 0, sequence.getTicks() * gridCellWidth, getHeight());
+        sequence.setOnNoteChanged(_ -> {
+            sequence.getView().revalidate();
+            sequence.getView().repaint();
+            return null;
+        });
+
+        revalidate();
+        repaint();
     }
 
     private Tuple<Integer, Integer> fromAbsToGridPos(int x) {
@@ -95,11 +106,12 @@ public class InstrumentRowView extends JPanel {
         g.drawLine(0, getHeight() - 1, getWidth(), getHeight() - 1);
     }
 
+    public InstrumentRowController getController() {
+        return this.controller;
+    }
+
     public void setController(InstrumentRowController controller) {
         this.controller = controller;
     }
 
-    public InstrumentRowController getController() {
-        return this.controller;
-    }
 }

@@ -2,8 +2,6 @@ package vl.welcome.controllers;
 
 import vl.common.Settings;
 import vl.common.VLConstants;
-import vl.modals.controllers.NewProjectController;
-import vl.modals.views.NewProjectModal;
 import vl.welcome.views.WelcomeScreenWindow;
 
 import javax.swing.*;
@@ -19,37 +17,34 @@ public class WelcomeScreenController {
 
     private Function<String, Void> onWelcomeScreenClose;
 
+    public WelcomeScreenController() {
+        this(new WelcomeScreenWindow());
+    }
+
     public WelcomeScreenController(WelcomeScreenWindow welcomeScreenWindow) {
         this.welcomeScreenWindow = welcomeScreenWindow;
         welcomeScreenWindow.setController(this);
     }
 
+    public WelcomeScreenWindow getWindow() {
+        return welcomeScreenWindow;
+    }
+
     public void onContinueButtonClick() {
-        if(Objects.equals(Settings.getLastOpenedProjectPath(), ""))
+        if (Objects.equals(Settings.getLastOpenedProjectPath(), ""))
             Settings.getSettingsFromFile(VLConstants.SETTINGS_FILE_NAME);
 
         // load the last project file
         Settings.setCurrentProjectPath(Settings.getLastOpenedProjectPath());
+
+        welcomeScreenWindow.dispose();
+        onWelcomeScreenClose.apply(Settings.getCurrentProjectPath());
     }
 
     public void onNewProjectButtonClick() {
-        // prompt the user to create a new project file somewhere
-        Function<Boolean, Void> modalCallback = (Boolean success) -> {
-            if (success) {
-                // load the newly created project file
-                welcomeScreenWindow.dispose();
-            }
-            return null;
-        };
-
-        NewProjectModal newProjectModal = new NewProjectModal();
-        NewProjectController newProjectController = new NewProjectController(newProjectModal);
-        newProjectModal.setVisible(true);
-        newProjectController.setOnClose(e -> {
-            modalCallback.apply(e);
-            onWelcomeScreenClose.apply(Settings.getCurrentProjectPath());
-            return null;
-        });
+        welcomeScreenWindow.dispose();
+        Settings.setCurrentProjectPath(VLConstants.DEFAULT_PROJECT_PATH);
+        onWelcomeScreenClose.apply(Settings.getCurrentProjectPath());
     }
 
     public void onOpenProjectButtonClick() {
@@ -71,6 +66,7 @@ public class WelcomeScreenController {
 
         int result = fileChooser.showOpenDialog(welcomeScreenWindow);
         if (result == JFileChooser.APPROVE_OPTION) {
+            Settings.setCurrentProjectPath(fileChooser.getSelectedFile().getAbsolutePath());
             welcomeScreenWindow.dispose();
             onWelcomeScreenClose.apply(Settings.getCurrentProjectPath());
         }
@@ -81,7 +77,7 @@ public class WelcomeScreenController {
     }
 
     public boolean userHasLastProjectFile() {
-        if(Objects.equals(Settings.getLastOpenedProjectPath(), ""))
+        if (Objects.equals(Settings.getLastOpenedProjectPath(), ""))
             Settings.getSettingsFromFile(VLConstants.SETTINGS_FILE_NAME);
 
         return !Objects.equals(Settings.getLastOpenedProjectPath(), "");

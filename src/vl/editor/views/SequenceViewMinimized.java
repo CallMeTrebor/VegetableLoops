@@ -1,7 +1,7 @@
 package vl.editor.views;
 
 import vl.common.VLConstants;
-import vl.editor.models.SequenceModel;
+import vl.editor.controllers.SequenceController;
 import vl.editor.models.Note;
 
 import javax.swing.*;
@@ -10,24 +10,73 @@ import java.awt.*;
 public class SequenceViewMinimized extends JPanel {
     private Color backgroundColor;
     private Color noteColor;
-    private SequenceModel sequenceModel; // Reference to the model used only to access data, does not violate MVC
+    private SequenceController sequenceController;
 
-    public SequenceViewMinimized(SequenceModel sequenceModel) {
-        this(sequenceModel, Color.BLUE, Color.RED);
+    public SequenceViewMinimized() {
+        this(Color.BLUE, Color.RED);
     }
 
-    public SequenceViewMinimized(SequenceModel sequenceModel, Color backgroundColor, Color noteColor) {
-        this.sequenceModel = sequenceModel;
+    public SequenceViewMinimized(Color backgroundColor, Color noteColor) {
         this.backgroundColor = backgroundColor;
         this.noteColor = noteColor;
+        setBackground(VLConstants.BACKGROUND_COLOR);
+
+        // on right click show a popup menu
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem deleteOption = new JMenuItem("Delete");
+        deleteOption.addActionListener(e -> {
+            if (sequenceController != null) {
+                sequenceController.deleteSequence();
+            }
+        });
+
+        JMenuItem editOption = new JMenuItem("Edit");
+        editOption.addActionListener(e -> {
+            if (sequenceController != null) {
+                sequenceController.editSequence();
+            }
+        });
+
+        JMenuItem copyAfterOption = new JMenuItem("Copy After");
+        copyAfterOption.addActionListener(e -> {
+            if (sequenceController != null) {
+                sequenceController.copySequenceAfter();
+            }
+        });
+
+        JMenuItem copyBeforeOption = new JMenuItem("Copy Before");
+        copyBeforeOption.addActionListener(e -> {
+            if (sequenceController != null) {
+                sequenceController.copySequenceBefore();
+            }
+        });
+
+        popupMenu.add(editOption);
+        popupMenu.add(copyBeforeOption);
+        popupMenu.add(copyAfterOption);
+        popupMenu.add(deleteOption);
+
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            public void mouseReleased(java.awt.event.MouseEvent e) {
+                if (e.isPopupTrigger()) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
     }
 
-    public SequenceModel getSequenceModel() {
-        return sequenceModel;
+    public SequenceController getSequenceController() {
+        return sequenceController;
     }
 
-    public void setSequenceModel(SequenceModel sequenceModel) {
-        this.sequenceModel = sequenceModel;
+    public void setSequenceController(SequenceController sequenceController) {
+        this.sequenceController = sequenceController;
     }
 
     public Color getBackgroundColor() {
@@ -36,6 +85,7 @@ public class SequenceViewMinimized extends JPanel {
 
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;
+        repaint();
     }
 
     public Color getNoteColor() {
@@ -44,16 +94,12 @@ public class SequenceViewMinimized extends JPanel {
 
     public void setNoteColor(Color noteColor) {
         this.noteColor = noteColor;
+        repaint();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        if (sequenceModel == null) {
-            System.out.println("[WARN] No model set for SequenceViewMinimized: " + this);
-            return; // Avoid rendering if no model is set
-        }
 
         // Fill the background
         g.setColor(backgroundColor);
@@ -64,7 +110,7 @@ public class SequenceViewMinimized extends JPanel {
 
         // Compute block dimensions
         int blockHeight = panelHeight / 32;
-        int totalTicks = sequenceModel.getTicks();
+        int totalTicks = sequenceController.getTicks();
 
         // Calculate exact pixel positions for each tick
         int[] tickPositions = new int[totalTicks + 1];
@@ -72,9 +118,12 @@ public class SequenceViewMinimized extends JPanel {
             tickPositions[i] = (int) Math.round((double) i / totalTicks * panelWidth);
         }
 
+        int topNote = sequenceController.getNotes().stream().mapToInt(Note::getNote).max().orElse(0);
+        int bottomNote = sequenceController.getNotes().stream().mapToInt(Note::getNote).min().orElse(0);
+
         // Draw each note
-        g.setColor(noteColor);
-        for (Note note : sequenceModel.getNotes()) {
+        for (Note note : sequenceController.getNotes()) {
+            g.setColor(noteColor);
             int entryTick = (int) Math.min(note.getEntryTick(), totalTicks); // Clamp entry tick
             int endTick = (int) Math.min(note.getEntryTick() + note.getDuration(), totalTicks); // Clamp end tick
 
@@ -83,14 +132,19 @@ public class SequenceViewMinimized extends JPanel {
                 continue;
             }
 
+
             int x = tickPositions[entryTick];
             int width = tickPositions[endTick] - x;
-            int y = note.getNote() * blockHeight;
+            int y = (topNote - note.getNote()) * blockHeight;
 
             // Ensure note width and position fit within panel bounds
             width = Math.min(width, panelWidth - x);
 
-            g.fillRect(x, y, width, blockHeight);
+            g.fillRoundRect(x, y, width, blockHeight, 5, 5);
+
+            // Write the note name
+            g.setColor(VLConstants.TEXT_COLOR);
+            g.drawString(Note.getNoteName(note.getNote()), x + 5, y + blockHeight / 2);
         }
 
         // Draw a line at the bottom of the panel

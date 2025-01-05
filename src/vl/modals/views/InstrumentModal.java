@@ -50,13 +50,13 @@ public class InstrumentModal extends JFrame {
         add(saveButton, c);
 
         saveButton.addActionListener(e -> {
-            if(instrumentModalController == null) return;
-            instrumentModalController.onModalExit (
-                new InstrumentTypeModel (
-                        0,
-                        instrumentNameField.getText(),
-                        instrumentVolumeSlider.getValue()
-                )
+            if (instrumentModalController == null) return;
+            instrumentModalController.onModalExit(
+                    new InstrumentTypeModel(
+                            0,
+                            instrumentNameField.getText(),
+                            instrumentVolumeSlider.getValue()
+                    )
             );
         });
     }

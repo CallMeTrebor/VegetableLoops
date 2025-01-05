@@ -61,9 +61,9 @@ public class NewProjectModal extends JFrame {
 
         browseButton.addActionListener(e -> onBrowse.apply(null));
         createButton.addActionListener(e -> {
-                if(onCreate != null) onCreate.apply(null);
-                if(onClose != null) onClose.apply(true);
-            }
+                    if (onCreate != null) onCreate.apply(null);
+                    if (onClose != null) onClose.apply(true);
+                }
         );
 
         addWindowListener(new WindowAdapter() {
@@ -74,20 +74,20 @@ public class NewProjectModal extends JFrame {
         });
     }
 
-    public void setProjectNameText(String text) {
-        projectNameLabel.setText(text);
-    }
-
     public String getProjectNameText() {
         return projectNameLabel.getText();
     }
 
-    public void setProjectPathText(String text) {
-        projectPathField.setText(text);
+    public void setProjectNameText(String text) {
+        projectNameLabel.setText(text);
     }
 
     public String getProjectPathText() {
         return projectPathField.getText();
+    }
+
+    public void setProjectPathText(String text) {
+        projectPathField.setText(text);
     }
 
     public Function<Void, Void> getOnBrowse() {

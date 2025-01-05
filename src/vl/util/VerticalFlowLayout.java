@@ -1,7 +1,6 @@
 package vl.util;
 
 import java.awt.*;
-import javax.swing.*;
 
 public class VerticalFlowLayout extends FlowLayout {
     public VerticalFlowLayout() {

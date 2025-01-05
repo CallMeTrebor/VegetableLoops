@@ -5,7 +5,7 @@ import vl.modals.SequencerModalNotesModel;
 import vl.modals.views.SequencerModal;
 import vl.modals.views.SequencerModalNotesPanel;
 
-import java.util.function.Function;
+import java.util.List;
 
 public class SequencerModalNotesController {
     private final SequencerModal parent;
@@ -13,7 +13,7 @@ public class SequencerModalNotesController {
     private final SequencerModalNotesModel model;
 
     public SequencerModalNotesController(SequencerModal parent, int ticks) {
-        this(new SequencerModalNotesModel(), new SequencerModalNotesPanel(ticks), parent);
+        this(new SequencerModalNotesModel(parent.getSequenceController()), new SequencerModalNotesPanel(ticks), parent);
     }
 
     public SequencerModalNotesController(SequencerModalNotesModel model, SequencerModalNotesPanel view, SequencerModal parent) {
@@ -21,7 +21,7 @@ public class SequencerModalNotesController {
         this.model = model;
         this.parent = parent;
 
-        view.setController(this);
+        this.view.setController(this);
     }
 
     public SequencerModalNotesPanel getView() {
@@ -42,5 +42,17 @@ public class SequencerModalNotesController {
 
     public int getTicks() {
         return parent.getTicks();
+    }
+
+    public int getGridCellWidth() {
+        return view.getGridCellWidth();
+    }
+
+    public int getViewWidth() {
+        return view.getWidth();
+    }
+
+    public List<Note> getNotes() {
+        return model.getNotes();
     }
 }

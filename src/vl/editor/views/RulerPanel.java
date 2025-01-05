@@ -22,16 +22,6 @@ public class RulerPanel extends JPanel {
         this(10, 20, 100);
     }
 
-    public void setPixelsPerTick(int pixelsPerTick) {
-        this.pixelsPerTick = pixelsPerTick;
-        repaint();
-    }
-
-    public void setTotalTicks(int totalTicks) {
-        this.totalTicks = totalTicks;
-        repaint();
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -63,7 +53,17 @@ public class RulerPanel extends JPanel {
         return pixelsPerTick;
     }
 
+    public void setPixelsPerTick(int pixelsPerTick) {
+        this.pixelsPerTick = pixelsPerTick;
+        repaint();
+    }
+
     public int getTotalTicks() {
         return totalTicks;
+    }
+
+    public void setTotalTicks(int totalTicks) {
+        this.totalTicks = totalTicks;
+        repaint();
     }
 }

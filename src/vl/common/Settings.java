@@ -1,6 +1,8 @@
 package vl.common;
 
-import vl.util.FileIO;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public class Settings {
     private static String lastOpenedProjectPath = "";
@@ -16,12 +18,11 @@ public class Settings {
 
     // TODO: fill in when the settings file format is decided
     public static void getSettingsFromFile(String filePath) {
-        if(!FileIO.doesFileExist(filePath)) {
-            return;
+        Path path = Path.of(filePath);
+        if (!Files.exists(path)) {
         } else {
-            try {
-                String settings = FileIO.readFromFile(filePath);
-                // parse settings
+            try (var lines = Files.lines(path)) {
+                lastOpenedProjectPath = lines.collect(Collectors.joining("\n"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

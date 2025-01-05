@@ -1,4 +1,5 @@
 package vl.modals.views;
+
 import vl.editor.controllers.SequenceController;
 import vl.editor.models.Note;
 import vl.editor.views.RulerPanel;
@@ -9,22 +10,22 @@ import java.awt.*;
 import java.util.function.Function;
 
 public class SequencerModal extends JFrame {
-    private SequenceController sequenceController;
     private static final int GRID_ROWS = 12; // Number of note rows
     private static final int GRID_COLS = 64; // Number of time ticks
-
-    private SequencerModalNotesController sequencerModalNotesController;
-    private RulerPanel rulerPanel;
+    private final SequenceController sequenceController;
+    private final SequencerModalNotesController sequencerModalNotesController;
+    private final RulerPanel rulerPanel;
 
     private Function<Note, Void> onNoteAdd;
     private Function<Note, Void> onNoteRemove;
 
-    public SequencerModal(int ticks) {
+    public SequencerModal(int ticks, SequenceController sequenceController) {
         super("Sequencer");
         setLayout(new BorderLayout());
-        setSize(1200, 400);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
 
+        this.sequenceController = sequenceController;
         sequencerModalNotesController = new SequencerModalNotesController(this, ticks);
         rulerPanel = new RulerPanel();
         add(rulerPanel, BorderLayout.NORTH);
@@ -38,10 +39,6 @@ public class SequencerModal extends JFrame {
                 dispose();
             }
         });
-    }
-
-    public void setSequenceController(SequenceController sequenceController) {
-        this.sequenceController = sequenceController;
     }
 
     public void setTickCount(int tickCount) {
@@ -76,5 +73,9 @@ public class SequencerModal extends JFrame {
 
     public int getTicks() {
         return sequenceController.getTicks();
+    }
+
+    public SequenceController getSequenceController() {
+        return sequenceController;
     }
 }

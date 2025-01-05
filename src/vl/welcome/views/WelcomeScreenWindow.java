@@ -8,8 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class WelcomeScreenWindow extends JFrame {
-    private WelcomeScreenController controller;
     private final VLButton continueButton;
+    private WelcomeScreenController controller;
 
     public WelcomeScreenWindow() {
         setTitle("Welcome");
@@ -53,7 +53,7 @@ public class WelcomeScreenWindow extends JFrame {
                 "<html>" +
                         "<span style='color:green;'>Vegetable</span>" +
                         "<span style='color:yellow;'>Loops</span>" +
-                    "</html>"
+                        "</html>"
         );
         appNameText.setFont(appNameText.getFont().deriveFont(30.0f));
 
@@ -80,12 +80,12 @@ public class WelcomeScreenWindow extends JFrame {
         continueButton.setEnabled(shouldShowContinueButton);
     }
 
+    public WelcomeScreenController getController() {
+        return controller;
+    }
+
     public void setController(WelcomeScreenController controller) {
         this.controller = controller;
         updateWelcomeBackMode();
-    }
-
-    public WelcomeScreenController getController() {
-        return controller;
     }
 }

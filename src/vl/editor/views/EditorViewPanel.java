@@ -1,7 +1,6 @@
 package vl.editor.views;
 
 import vl.common.VLConstants;
-import vl.util.VerticalFlowLayout;
 
 import javax.swing.*;
 

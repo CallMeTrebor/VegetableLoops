@@ -16,6 +16,14 @@ public class Note {
         this.entryTick = entryTick;
     }
 
+    public static String getNoteName(int midiNote) {
+        // Array of note names with sharps
+        String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+        int octave = (midiNote / 12) - 1;
+        String note = notes[midiNote % 12];
+        return note + octave;
+    }
+
     public int getNote() {
         return note;
     }
@@ -46,5 +54,9 @@ public class Note {
 
     public void setEntryTick(long entryTick) {
         this.entryTick = entryTick;
+    }
+
+    public String serialiseToFile() {
+        return String.format("%d,%d,%d,%d", note, velocity, duration, entryTick);
     }
 }
