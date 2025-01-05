@@ -16,24 +16,8 @@ public class InstrumentTypeController {
         this.view.setController(this);
     }
 
-    public InstrumentTypeController() {
-        this(new InstrumentTypeModel(0, "Instrument Type", 100), new InstrumentTypeView());
-    }
-
-    public InstrumentTypeModel getModel() {
-        return model;
-    }
-
-    public void setModel(InstrumentTypeModel model) {
-        this.model = model;
-    }
-
     public InstrumentTypeView getView() {
         return view;
-    }
-
-    public void setView(InstrumentTypeView view) {
-        this.view = view;
     }
 
     public String getInstrumentTypeName() {

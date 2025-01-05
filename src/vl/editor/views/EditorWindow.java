@@ -83,14 +83,10 @@ public class EditorWindow extends JFrame {
         });
 
         toolBar.add(playButton);
-        playButton.addActionListener(e -> {
-            editorController.playMusic();
-        });
+        playButton.addActionListener(e -> editorController.playMusic());
 
         toolBar.add(stopButton);
-        stopButton.addActionListener(e -> {
-            editorController.stopMusic();
-        });
+        stopButton.addActionListener(e -> editorController.stopMusic());
 
         // on resize redraw all
         addComponentListener(new java.awt.event.ComponentAdapter() {

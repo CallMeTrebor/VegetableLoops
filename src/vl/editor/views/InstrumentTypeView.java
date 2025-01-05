@@ -37,9 +37,7 @@ public class InstrumentTypeView extends JPanel {
         volumeSlider.setPaintTicks(false);
         add(volumeSlider, gbc);
 
-        volumeSlider.addChangeListener(e -> {
-            setVolume(volumeSlider.getValue());
-        });
+        volumeSlider.addChangeListener(e -> setVolume(volumeSlider.getValue()));
 
         VLLabel noteColorLabel = new VLLabel("Note Color:");
         gbc = new GridBagConstraints();

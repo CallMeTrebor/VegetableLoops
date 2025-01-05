@@ -30,10 +30,6 @@ public class ColorPreview extends JPanel {
         });
     }
 
-    public Function<Color, Void> getColorChangeCallback() {
-        return colorChangeCallback;
-    }
-
     public void setColorChangeCallback(Function<Color, Void> colorChangeCallback) {
         this.colorChangeCallback = colorChangeCallback;
     }

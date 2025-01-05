@@ -71,10 +71,6 @@ public class SequenceViewMinimized extends JPanel {
         });
     }
 
-    public SequenceController getSequenceController() {
-        return sequenceController;
-    }
-
     public void setSequenceController(SequenceController sequenceController) {
         this.sequenceController = sequenceController;
     }
@@ -119,7 +115,6 @@ public class SequenceViewMinimized extends JPanel {
         }
 
         int topNote = sequenceController.getNotes().stream().mapToInt(Note::getNote).max().orElse(0);
-        int bottomNote = sequenceController.getNotes().stream().mapToInt(Note::getNote).min().orElse(0);
 
         // Draw each note
         for (Note note : sequenceController.getNotes()) {

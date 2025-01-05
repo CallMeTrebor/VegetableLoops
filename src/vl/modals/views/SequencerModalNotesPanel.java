@@ -216,14 +216,6 @@ public class SequencerModalNotesPanel extends JPanel {
         }
     }
 
-    public int getGridCellWidth() {
-        return gridCellWidth;
-    }
-
-    public List<Note> getNotes() {
-        return controller.getNotes();
-    }
-
     private class CellToPaint {
         int x, y, length; // Length represents the duration of the note
         boolean isStart, isEnd;

@@ -13,15 +13,7 @@ public class Tuple<T1, T2> {
         return first;
     }
 
-    public void setFirst(T1 first) {
-        this.first = first;
-    }
-
     public T2 getSecond() {
         return second;
-    }
-
-    public void setSecond(T2 second) {
-        this.second = second;
     }
 }

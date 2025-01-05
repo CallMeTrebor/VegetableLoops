@@ -5,10 +5,6 @@ public class Note {
     private int duration;
     private long entryTick;
 
-    public Note() {
-        this(0, 0, 0, 0);
-    }
-
     public Note(int note, int velocity, int duration, long entryTick) {
         this.note = note;
         this.velocity = velocity;

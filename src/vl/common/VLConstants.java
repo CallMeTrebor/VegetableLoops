@@ -5,7 +5,6 @@ import java.util.Map;
 
 public class VLConstants {
     public static final String PROJECT_FILE_EXTENSION = ".vl";
-    public static final String PROJECT_FILE_DESCRIPTION = "VL Project File";
     public static final String SETTINGS_FILE_NAME = STR."settings\{PROJECT_FILE_EXTENSION}";
     public static final String DEFAULT_PROJECT_PATH = STR."default\{PROJECT_FILE_EXTENSION}";
     public static final String WINDOW_ICON_PATH = "res/icon.png";

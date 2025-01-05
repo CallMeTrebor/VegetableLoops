@@ -41,25 +41,9 @@ public class RulerPanel extends JPanel {
         }
     }
 
-    public int getTickSpacing() {
-        return tickSpacing;
-    }
-
-    public void setTickSpacing(int tickSpacing) {
-        this.tickSpacing = tickSpacing;
-    }
-
-    public int getPixelsPerTick() {
-        return pixelsPerTick;
-    }
-
     public void setPixelsPerTick(int pixelsPerTick) {
         this.pixelsPerTick = pixelsPerTick;
         repaint();
-    }
-
-    public int getTotalTicks() {
-        return totalTicks;
     }
 
     public void setTotalTicks(int totalTicks) {

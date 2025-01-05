@@ -74,40 +74,20 @@ public class NewProjectModal extends JFrame {
         });
     }
 
-    public String getProjectNameText() {
-        return projectNameLabel.getText();
-    }
-
     public void setProjectNameText(String text) {
         projectNameLabel.setText(text);
-    }
-
-    public String getProjectPathText() {
-        return projectPathField.getText();
     }
 
     public void setProjectPathText(String text) {
         projectPathField.setText(text);
     }
 
-    public Function<Void, Void> getOnBrowse() {
-        return onBrowse;
-    }
-
     public void setOnBrowse(Function<Void, Void> onBrowse) {
         this.onBrowse = onBrowse;
     }
 
-    public Function<Void, Void> getOnCreate() {
-        return onCreate;
-    }
-
     public void setOnCreate(Function<Void, Void> onCreate) {
         this.onCreate = onCreate;
-    }
-
-    public Function<Boolean, Void> getOnClose() {
-        return onClose;
     }
 
     public void setOnClose(Function<Boolean, Void> onClose) {

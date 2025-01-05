@@ -19,18 +19,13 @@ public class Settings {
     // TODO: fill in when the settings file format is decided
     public static void getSettingsFromFile(String filePath) {
         Path path = Path.of(filePath);
-        if (!Files.exists(path)) {
-        } else {
+        if (Files.exists(path)) {
             try (var lines = Files.lines(path)) {
                 lastOpenedProjectPath = lines.collect(Collectors.joining("\n"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void saveSettingsToFile(String filePath) {
-
     }
 
     public static String getCurrentProjectPath() {

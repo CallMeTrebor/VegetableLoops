@@ -12,10 +12,6 @@ public class InstrumentRowController {
     private final InstrumentRowModel model;
     private final InstrumentRowView view;
 
-    public InstrumentRowController() {
-        this(new InstrumentRowModel(), new InstrumentRowView());
-    }
-
     public InstrumentRowController(InstrumentRowModel model, InstrumentRowView view) {
         this.model = model;
         this.view = view;
@@ -27,16 +23,8 @@ public class InstrumentRowController {
         return model.getStartOf(sequence);
     }
 
-    public InstrumentRowModel getModel() {
-        return model;
-    }
-
     public InstrumentRowView getView() {
         return view;
-    }
-
-    public List<Tuple<SequenceController, Integer>> getSequences() {
-        return model.getSequences();
     }
 
     public void addSequence(SequenceController sequence, Integer tickOffset) {

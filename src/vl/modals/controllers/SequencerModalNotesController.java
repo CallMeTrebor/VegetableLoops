@@ -27,11 +27,6 @@ public class SequencerModalNotesController {
     public SequencerModalNotesPanel getView() {
         return view;
     }
-
-    public SequencerModalNotesModel getModel() {
-        return model;
-    }
-
     public void addNote(Note n) {
         parent.addNote(n);
     }
@@ -42,14 +37,6 @@ public class SequencerModalNotesController {
 
     public int getTicks() {
         return parent.getTicks();
-    }
-
-    public int getGridCellWidth() {
-        return view.getGridCellWidth();
-    }
-
-    public int getViewWidth() {
-        return view.getWidth();
     }
 
     public List<Note> getNotes() {

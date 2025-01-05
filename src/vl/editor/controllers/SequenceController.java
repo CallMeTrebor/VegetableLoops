@@ -47,14 +47,6 @@ public class SequenceController {
         return null;
     }
 
-    public Void removeNote(int index) {
-        sequenceModel.removeNote(index);
-        if (onNoteChanged != null) onNoteChanged.apply(null);
-        view.repaint(); // Update the view
-
-        return null;
-    }
-
     public Void removeNote(Note note) {
         sequenceModel.removeNote(note);
         if (onNoteChanged != null) onNoteChanged.apply(null);
@@ -99,12 +91,6 @@ public class SequenceController {
         }
     }
 
-    public List<Note> getNotesAtRow(int row) {
-        return sequenceModel.getNotes().stream()
-                .filter(note -> note.getNote() == row)
-                .collect(Collectors.toList());
-    }
-
     public void launchModal() {
         modal.setVisible(true);
     }
@@ -112,10 +98,6 @@ public class SequenceController {
     public void launchModal(int tickNumber) {
         modal.setTickCount(tickNumber);
         modal.setVisible(true);
-    }
-
-    public Function<SequenceController, Void> getOnModalClose() {
-        return onModalClose;
     }
 
     public void setOnModalClose(Function<SequenceController, Void> onModalClose) {
@@ -142,19 +124,8 @@ public class SequenceController {
         this.onNoteChanged = onNoteChanged;
     }
 
-    public int getDuration() {
-        return sequenceModel.getNotes().stream()
-                .mapToInt(note -> Math.toIntExact(note.getEntryTick() + note.getDuration()))
-                .max()
-                .orElse(0);
-    }
-
     public int getTicks() {
         return sequenceModel.getTicks();
-    }
-
-    public void setTicks(int ticks) {
-        sequenceModel.setTicks(ticks);
     }
 
     public Color getNoteColor() {

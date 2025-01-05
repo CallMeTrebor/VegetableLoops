@@ -32,10 +32,6 @@ public class InstrumentRowModel {
         return sequences;
     }
 
-    public int getInstrumentID() {
-        return instrumentID;
-    }
-
     public void setInstrumentID(int instrumentID) {
         this.instrumentID = instrumentID;
         sequences.forEach(item -> item.getFirst().setInstrumentID(instrumentID));

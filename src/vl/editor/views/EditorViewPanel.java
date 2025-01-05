@@ -15,10 +15,6 @@ public class EditorViewPanel extends JPanel {
         add(instrumentRowView);
     }
 
-    public void removeView(InstrumentRowView instrumentRowView) {
-        remove(instrumentRowView);
-    }
-
     public void clearView() {
         removeAll();
         revalidate();

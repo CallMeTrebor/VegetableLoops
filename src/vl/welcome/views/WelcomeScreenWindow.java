@@ -80,10 +80,6 @@ public class WelcomeScreenWindow extends JFrame {
         continueButton.setEnabled(shouldShowContinueButton);
     }
 
-    public WelcomeScreenController getController() {
-        return controller;
-    }
-
     public void setController(WelcomeScreenController controller) {
         this.controller = controller;
         updateWelcomeBackMode();

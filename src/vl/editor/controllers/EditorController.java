@@ -22,30 +22,8 @@ public class EditorController {
         editorViewPanel.repaint();
     }
 
-    public EditorModel getEditorModel() {
-        return editorModel;
-    }
-
-    public EditorViewPanel getEditorViewPanel() {
-        return editorViewPanel;
-    }
-
     public void addInstrumentRowToModel(InstrumentRowController instrumentRow) {
         editorModel.addInstrumentRow(instrumentRow);
-    }
-
-    public void clearInstrumentRows() {
-        editorModel.getInstrumentRows().clear();
-        editorViewPanel.clearView();
-        editorViewPanel.repaint();
-    }
-
-    public EditorViewPanel getView() {
-        return editorViewPanel;
-    }
-
-    public List<InstrumentRowController> getInstrumentRows() {
-        return editorModel.getInstrumentRows();
     }
 
     public void playMusic() {

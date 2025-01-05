@@ -10,10 +10,7 @@ import java.awt.*;
 import java.util.function.Function;
 
 public class SequencerModal extends JFrame {
-    private static final int GRID_ROWS = 12; // Number of note rows
-    private static final int GRID_COLS = 64; // Number of time ticks
     private final SequenceController sequenceController;
-    private final SequencerModalNotesController sequencerModalNotesController;
     private final RulerPanel rulerPanel;
 
     private Function<Note, Void> onNoteAdd;
@@ -26,7 +23,7 @@ public class SequencerModal extends JFrame {
         setLocationRelativeTo(null);
 
         this.sequenceController = sequenceController;
-        sequencerModalNotesController = new SequencerModalNotesController(this, ticks);
+        SequencerModalNotesController sequencerModalNotesController = new SequencerModalNotesController(this, ticks);
         rulerPanel = new RulerPanel();
         add(rulerPanel, BorderLayout.NORTH);
         add(sequencerModalNotesController.getView(), BorderLayout.CENTER);
@@ -47,16 +44,8 @@ public class SequencerModal extends JFrame {
         rulerPanel.repaint();
     }
 
-    public Function<Note, Void> getOnNoteAdd() {
-        return onNoteAdd;
-    }
-
     public void setOnNoteAdd(Function<Note, Void> onNoteAdd) {
         this.onNoteAdd = onNoteAdd;
-    }
-
-    public Function<Note, Void> getOnNoteRemove() {
-        return onNoteRemove;
     }
 
     public void setOnNoteRemove(Function<Note, Void> onNoteRemove) {

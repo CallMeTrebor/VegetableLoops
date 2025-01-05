@@ -8,10 +8,6 @@ public class SequenceModel {
     private int instrumentID;
     private int ticks;
 
-    public SequenceModel() {
-        this(0, 1);
-    }
-
     public SequenceModel(int instrumentID, int ticks) {
         this.instrumentID = instrumentID;
         this.ticks = ticks;
@@ -31,10 +27,6 @@ public class SequenceModel {
 
     public void removeNote(Note note) {
         notes.remove(note);
-    }
-
-    public Note getNote(int index) {
-        return notes.get(index);
     }
 
     public int getInstrumentID() {
