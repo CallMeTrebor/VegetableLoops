@@ -64,4 +64,8 @@ public class InstrumentRowModel {
 
         return str.toString();
     }
+
+    public int getInstrumentID() {
+        return instrumentID;
+    }
 }

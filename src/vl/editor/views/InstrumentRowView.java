@@ -40,7 +40,7 @@ public class InstrumentRowView extends JPanel {
                     // Launch modal with a new sequence
                     int tickNumber = Math.max(Math.abs(endTick - startTick), 1);
                     SequenceController sequenceController = new SequenceController(tickNumber, getController());
-                    sequenceController.setInstrumentID(0); // TODO: DEBUG NUMBER
+                    sequenceController.setInstrumentID(controller.getInstrumentID());
                     sequenceController.launchModal(tickNumber);
 
                     // Add to model

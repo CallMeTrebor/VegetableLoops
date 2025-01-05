@@ -83,4 +83,8 @@ public class InstrumentRowController {
     public void setVolume(int v) {
         model.getSequences().forEach(item -> item.first().setVolume(v));
     }
+
+    public int getInstrumentID() {
+        return model.getInstrumentID();
+    }
 }

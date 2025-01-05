@@ -25,15 +25,19 @@ public class Main {
         Settings.getSettingsFromFile(VLConstants.SETTINGS_FILE_NAME);
         WelcomeScreenController wc = new WelcomeScreenController();
         wc.setOnWelcomeScreenClose(Main::startEditor);
-        wc.getWindow().setVisible(true);
-
         wc.getWindow().setIconImage(Toolkit.getDefaultToolkit().getImage(VLConstants.WINDOW_ICON_PATH));
+        wc.getWindow().setVisible(true);
     }
 
     public static Void startEditor(String projectPath) {
-        // read lines from project path
         EditorWindow editorWindow = new EditorWindow();
+        CreateWindowFromProjectFile(projectPath, editorWindow);
+        editorWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(VLConstants.WINDOW_ICON_PATH));
+        editorWindow.setVisible(true);
+        return null;
+    }
 
+    private static void CreateWindowFromProjectFile(String projectPath, EditorWindow editorWindow) {
         Path path = Path.of(projectPath);
         try (Stream<String> lines = Files.lines(path)) {
             lines.forEach(l -> {
@@ -66,11 +70,11 @@ public class Main {
                         sc.addNote(new Note(note, velocity, duration, entryTick));
                     }
                     irc.addSequence(sc, offset);
-
-                    // to update the ID down the whole chain
-                    itc.setInstrumentID(instrumentID);
-                    itc.setVolume(volume);
                 }
+
+                // to update the ID down the whole chain
+                itc.setInstrumentID(instrumentID);
+                itc.setVolume(volume);
             });
         } catch (AccessDeniedException e) {
             System.err.println(STR."Access denied to the file: \{projectPath}");
@@ -88,9 +92,5 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        editorWindow.setIconImage(Toolkit.getDefaultToolkit().getImage(VLConstants.WINDOW_ICON_PATH));
-        editorWindow.setVisible(true);
-        return null;
     }
 }

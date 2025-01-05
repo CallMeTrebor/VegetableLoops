@@ -1,7 +1,7 @@
 package vl.modals.controllers;
 
 import vl.editor.models.Note;
-import vl.modals.SequencerModalNotesModel;
+import vl.modals.models.SequencerModalNotesModel;
 import vl.modals.views.SequencerModal;
 import vl.modals.views.SequencerModalNotesPanel;
 

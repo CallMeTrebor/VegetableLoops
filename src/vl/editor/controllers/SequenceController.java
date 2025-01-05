@@ -67,9 +67,11 @@ public class SequenceController {
      */
     public void compileToTrack(Track track, long tickOffset) {
         try {
-            ShortMessage setInstrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0,
-                    sequenceModel.getInstrumentID(), 0);
-            track.add(new MidiEvent(setInstrument, tickOffset));
+            synchronized (track) {
+                ShortMessage setInstrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0,
+                        sequenceModel.getInstrumentID(), 0);
+                track.add(new MidiEvent(setInstrument, tickOffset));
+            }
         } catch (InvalidMidiDataException e) {
             e.printStackTrace();
 
@@ -78,11 +80,13 @@ public class SequenceController {
 
         for (Note note : sequenceModel.getNotes()) {
             try {
-                ShortMessage on = new ShortMessage(ShortMessage.NOTE_ON, 0, note.getNote(), note.getVelocity());
-                ShortMessage off = new ShortMessage(ShortMessage.NOTE_OFF, 0, note.getNote(), note.getVelocity());
+                synchronized (track) {
+                    ShortMessage on = new ShortMessage(ShortMessage.NOTE_ON, 0, note.getNote(), note.getVelocity());
+                    ShortMessage off = new ShortMessage(ShortMessage.NOTE_OFF, 0, note.getNote(), note.getVelocity());
 
-                track.add(new MidiEvent(on, tickOffset + note.getEntryTick()));
-                track.add(new MidiEvent(off, tickOffset + note.getEntryTick() + note.getDuration()));
+                    track.add(new MidiEvent(on, tickOffset + note.getEntryTick()));
+                    track.add(new MidiEvent(off, tickOffset + note.getEntryTick() + note.getDuration()));
+                }
             } catch (InvalidMidiDataException e) {
                 e.printStackTrace();
 

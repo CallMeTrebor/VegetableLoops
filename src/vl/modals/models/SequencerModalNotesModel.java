@@ -1,4 +1,4 @@
-package vl.modals;
+package vl.modals.models;
 
 import vl.editor.controllers.SequenceController;
 import vl.editor.models.Note;
