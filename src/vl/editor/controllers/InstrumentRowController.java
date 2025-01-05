@@ -2,11 +2,9 @@ package vl.editor.controllers;
 
 import vl.editor.models.InstrumentRowModel;
 import vl.editor.views.InstrumentRowView;
-import vl.util.Tuple;
 
 import javax.sound.midi.Track;
 import java.awt.*;
-import java.util.List;
 
 public class InstrumentRowController {
     private final InstrumentRowModel model;
@@ -44,7 +42,7 @@ public class InstrumentRowController {
             int finalI = i;
             threads[i] = new Thread(() -> {
                 SequenceController sequence = model.getSequence(finalI);
-                sequence.compileToTrack(track, model.getSequences().get(finalI).getSecond());
+                sequence.compileToTrack(track, model.getSequences().get(finalI).second());
             });
             threads[i].start();
         }
@@ -72,7 +70,7 @@ public class InstrumentRowController {
     }
 
     public void removeSequence(SequenceController sequence) {
-        model.getSequences().removeIf(item -> item.getFirst() == sequence);
+        model.getSequences().removeIf(item -> item.first() == sequence);
         view.remove(sequence.getView());
         view.revalidate();
         view.repaint();
@@ -83,6 +81,6 @@ public class InstrumentRowController {
     }
 
     public void setVolume(int v) {
-        model.getSequences().forEach(item -> item.getFirst().setVolume(v));
+        model.getSequences().forEach(item -> item.first().setVolume(v));
     }
 }

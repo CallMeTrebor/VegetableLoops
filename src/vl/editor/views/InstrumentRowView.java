@@ -34,8 +34,8 @@ public class InstrumentRowView extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (dragStart != null && dragEnd != null) {
-                    int startTick = Math.min(dragStart.getFirst(), dragEnd.getFirst());
-                    int endTick = Math.max(dragStart.getFirst(), dragEnd.getFirst());
+                    int startTick = Math.min(dragStart.first(), dragEnd.first());
+                    int endTick = Math.max(dragStart.first(), dragEnd.first());
 
                     // Launch modal with a new sequence
                     int tickNumber = Math.max(Math.abs(endTick - startTick), 1);
@@ -94,8 +94,8 @@ public class InstrumentRowView extends JPanel {
 
         // Draw drag selection
         if (dragStart != null && dragEnd != null) {
-            int startX = Math.min(dragStart.getFirst(), dragEnd.getFirst()) * gridCellWidth;
-            int endX = Math.max(dragStart.getFirst(), dragEnd.getFirst()) * gridCellWidth;
+            int startX = Math.min(dragStart.first(), dragEnd.first()) * gridCellWidth;
+            int endX = Math.max(dragStart.first(), dragEnd.first()) * gridCellWidth;
 
             g.setColor(SELECTION_COLOR);
             g.fillRect(startX, 0, endX - startX, getHeight());

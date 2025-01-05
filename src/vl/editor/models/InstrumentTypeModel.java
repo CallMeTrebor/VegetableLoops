@@ -1,7 +1,5 @@
 package vl.editor.models;
 
-import java.awt.*;
-
 public class InstrumentTypeModel {
     private int instrumentTypeId;
     private String instrumentTypeName;

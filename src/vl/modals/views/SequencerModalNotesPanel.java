@@ -105,20 +105,20 @@ public class SequencerModalNotesPanel extends JPanel {
     private void removeCellToPaint(Tuple<Integer, Integer> cell) {
         // Remove the cell from visual representation
         cellsToPaint.removeIf(paintedCell ->
-                paintedCell.x == cell.getFirst() && paintedCell.y == cell.getSecond()
+                paintedCell.x == cell.first() && paintedCell.y == cell.second()
         );
 
         // Remove the corresponding note from the controller
-        int midiNote = topNote - cell.getSecond();
+        int midiNote = topNote - cell.second();
         Note noteToRemove = null;
 
         for (Note note : controller.getNotes()) {
             int noteStartTick = (int) note.getEntryTick();
             int noteEndTick = noteStartTick + note.getDuration();
             if (note.getNote() == midiNote &&
-                    noteStartTick <= cell.getFirst() &&
-                    noteEndTick > cell.getFirst()) {
-                int clickedTick = cell.getFirst();
+                    noteStartTick <= cell.first() &&
+                    noteEndTick > cell.first()) {
+                int clickedTick = cell.first();
                 if (noteStartTick == clickedTick) {
                     note.setDuration(note.getDuration() - 1);
                     note.setEntryTick(note.getEntryTick() + 1);
@@ -148,9 +148,9 @@ public class SequencerModalNotesPanel extends JPanel {
     }
 
     private void addCellsToPaint(Tuple<Integer, Integer> start, Tuple<Integer, Integer> end) {
-        int startX = Math.max(0, Math.min(start.getFirst(), end.getFirst()));
-        int endX = Math.min(controller.getTicks() - 1, Math.max(start.getFirst(), end.getFirst()));
-        int startY = start.getSecond();
+        int startX = Math.max(0, Math.min(start.first(), end.first()));
+        int endX = Math.min(controller.getTicks() - 1, Math.max(start.first(), end.first()));
+        int startY = start.second();
 
         for (int x = startX; x <= endX; x++) {
             boolean isStart = (x == startX);
@@ -185,8 +185,8 @@ public class SequencerModalNotesPanel extends JPanel {
 
         // Paint hover effect
         if (hoveredCell != null) {
-            int x = hoveredCell.getFirst();
-            int y = hoveredCell.getSecond();
+            int x = hoveredCell.first();
+            int y = hoveredCell.second();
 
             if (x >= 0 && x < controller.getTicks() && y >= 0 && (topNote - y) >= 0) {
                 g.setColor(new Color(173, 216, 230, 128)); // Light blue with transparency
@@ -202,9 +202,9 @@ public class SequencerModalNotesPanel extends JPanel {
 
         // Drag preview effect
         if (dragStart != null && dragEnd != null) {
-            int startX = Math.max(0, Math.min(dragStart.getFirst(), dragEnd.getFirst()));
-            int endX = Math.min(controller.getTicks() - 1, Math.max(dragStart.getFirst(), dragEnd.getFirst()));
-            int startY = dragStart.getSecond();
+            int startX = Math.max(0, Math.min(dragStart.first(), dragEnd.first()));
+            int endX = Math.min(controller.getTicks() - 1, Math.max(dragStart.first(), dragEnd.first()));
+            int startY = dragStart.second();
 
             g.setColor(new Color(173, 216, 230, 128)); // Light blue with transparency
 

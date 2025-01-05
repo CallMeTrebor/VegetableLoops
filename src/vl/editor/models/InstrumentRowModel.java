@@ -20,7 +20,7 @@ public class InstrumentRowModel {
     }
 
     public SequenceController getSequence(int index) {
-        return sequences.get(index).getFirst();
+        return sequences.get(index).first();
     }
 
     public void addSequence(SequenceController sequence, Integer tickOffset) {
@@ -34,21 +34,21 @@ public class InstrumentRowModel {
 
     public void setInstrumentID(int instrumentID) {
         this.instrumentID = instrumentID;
-        sequences.forEach(item -> item.getFirst().setInstrumentID(instrumentID));
+        sequences.forEach(item -> item.first().setInstrumentID(instrumentID));
     }
 
     public void setSequencesNoteColor(Color c) {
-        sequences.forEach(item -> item.getFirst().setNoteColor(c));
+        sequences.forEach(item -> item.first().setNoteColor(c));
     }
 
     public void setSequencesBackgroundColor(Color c) {
-        sequences.forEach(item -> item.getFirst().setBackgroundColor(c));
+        sequences.forEach(item -> item.first().setBackgroundColor(c));
     }
 
     public int getStartOf(SequenceController controller) {
         for (Tuple<SequenceController, Integer> sequence : sequences) {
-            if (sequence.getFirst() == controller) {
-                return sequence.getSecond();
+            if (sequence.first() == controller) {
+                return sequence.second();
             }
         }
 
@@ -59,7 +59,7 @@ public class InstrumentRowModel {
         StringBuilder str = new StringBuilder();
         str.append(STR."\{sequences.size()},");
         for (Tuple<SequenceController, Integer> sequence : sequences) {
-            str.append(STR."\{sequence.getSecond()},\{sequence.getFirst().serialiseToFile()}");
+            str.append(STR."\{sequence.second()},\{sequence.first().serialiseToFile()}");
         }
 
         return str.toString();
